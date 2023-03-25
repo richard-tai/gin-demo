@@ -19,7 +19,7 @@ var D *Logger = New(Conf{enableConsole: true})
 
 func New(cf Conf) *Logger {
 	if cf.flags == 0 {
-		cf.flags = log.Lshortfile | log.Ldate | log.Lmicroseconds
+		cf.flags = DEFAULT_FLAGS
 	}
 	lg := &Logger{
 		conf:        cf,
@@ -30,6 +30,9 @@ func New(cf Conf) *Logger {
 			log.Printf("%v", err)
 		}
 		lg.createFileLogger()
+	}
+	if cf.enableConsole {
+		log.SetFlags(cf.flags)
 	}
 	return lg
 }
@@ -186,3 +189,5 @@ var mapLevelTag = map[LEVEL]string{
 	ERROR: "[error]",
 	FATAL: "[fatal]",
 }
+
+var DEFAULT_FLAGS = log.Lshortfile | log.Ldate | log.Lmicroseconds
